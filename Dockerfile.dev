@@ -10,7 +10,7 @@ RUN apt-get update -qq && \
     rm -rf /var/cache/apt
 
 # add php,apache-module
-RUN docker-php-ext-install mbstring pdo_mysql
+RUN docker-php-ext-install mbstring mysqli pdo pdo_mysql
 
 # php.conf php-fpm.conf
 COPY docker/app/conf/php/php.ini /usr/local/etc/php/php.ini
