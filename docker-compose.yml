@@ -1,34 +1,56 @@
 version: '3'
 services:
-  nginx:
-    container_name: nginx
-    build: ./docker/nginx
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
-
-  backend:
-    container_name: backend
+  nginx-rp:
+    container_name: nginx-rp
     build:
-      context: .
+      context: ./containers/nginx-rp
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+      - '8080:8080'
+    depends_on:
+      - static
+      - nginx-fastcgi
+
+  nginx-fastcgi:
+    container_name: nginx-fastcgi
+    build:
+      context: ./containers/nginx-fastcgi
+      dockerfile: Dockerfile.dev
+    expose:
+      - '80'
+    depends_on:
+      - webapp
+
+  static:
+    image: nginx:1.15
+    container_name: static
+    volumes:
+      - ./containers/static:/usr/share/nginx/html
+    expose:
+      - '80'
+
+  webapp:
+    container_name: webapp
+    build:
+      context: ./containers/webapp
       dockerfile: Dockerfile.dev
     environment:
       SYMFONY_ENV: dev
-      DATABASE_HOST: db
+      DATABASE_HOST: database
       DATABASE_NAME: symfony_development
       DATABASE_USER: docker
       DATABASE_PASSWORD: docker
     volumes:
-      - ./:/app
+      - ./containers/webapp:/app
     expose:
-      - "9000"
+      - '9000'
     depends_on:
-      - db
+      - database
 
-  db:
+  database:
     image: mysql:5.7
-    container_name: db
+    container_name: database
     environment:
       TZ: 'Asia/Tokyo'
       MYSQL_ROOT_PASSWORD: root
@@ -37,9 +59,9 @@ services:
       MYSQL_PASSWORD: docker
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
-      - ./docker/db/data:/var/lib/mysql
-      - ./docker/db/conf/my.cnf:/etc/mysql/conf.d/my.cnf
-      - ./docker/db/sql:/docker-entrypoint-initdb.d
+      - ./containers/database/data:/var/lib/mysql
+      - ./containers/database/conf/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./containers/database/sql:/docker-entrypoint-initdb.d
     ports:
-      - 3306:3306
+      - '3306:3306'
 
