@@ -1,0 +1,44 @@
+security:
+    encoders:
+        AppBundle\Entity\User:
+            algorithm: bcrypt
+
+    providers:
+        user_entity:
+            entity:
+                class: AppBundle:User
+                property: email
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        admin_area:
+            pattern: ^/cms-admin
+
+            form_login:
+                provider: user_entity
+                check_path: admin_login
+                login_path: admin_login
+                username_parameter: _email
+                password_parameter: _password
+                csrf_token_generator: security.csrf.token_manager
+                default_target_path: admin_index
+
+            logout:
+                path: admin_logout
+                target: admin_login
+
+            remember_me:
+                secret:   '%secret%'
+                lifetime: 31536000 #1年
+                path:     /
+                domain:   ~
+
+            anonymous: true
+
+
+    access_control:
+        - { path: ^(/cms-admin)?/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cms-admin, roles: ROLE_ADMIN }
