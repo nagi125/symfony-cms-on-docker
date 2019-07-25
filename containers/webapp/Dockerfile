@@ -1,7 +1,7 @@
 FROM php:7.1-fpm
 
 ENV TZ Asia/Tokyo
-ENV SYMFONY_ENV dev
+ENV SYMFONY_ENV prod
 
 # install Lib for composer
 RUN apt-get update -qq && \
@@ -27,3 +27,7 @@ WORKDIR /app
 COPY composer.json composer.lock /app/
 RUN composer install
 
+# change owner
+RUN chown www-data:www-data -R ./
+
+ENTRYPOINT ["/bin/bash", "/app/docker-entrypoint.sh"]

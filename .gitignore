@@ -1,25 +1,25 @@
-/.web-server-pid
-/app/config/parameters.yml
-/build/
-/phpunit.xml
-/var/*
-!/var/cache
-/var/cache/*
-!var/cache/.gitkeep
-!/var/logs
-/var/logs/*
-!var/logs/.gitkeep
-!/var/sessions
-/var/sessions/*
-!var/sessions/.gitkeep
-!var/SymfonyRequirements.php
-/vendor/
-/web/bundles/
+containers/webapp/.web-server-pid
+containers/webapp/app/config/parameters.yml
+containers/webapp/build/
+containers/webapp/phpunit.xml
+containers/webapp/var/*
+!containers/webapp/var/cache
+containers/webapp/var/cache/*
+!containers/webapp/var/cache/.gitkeep
+!containers/webapp/var/logs
+containers/webapp/var/logs/*
+!containers/webapp/var/logs/.gitkeep
+!containers/webapp/var/sessions
+containers/webapp/var/sessions/*
+!containers/webapp/var/sessions/.gitkeep
+!containers/webapp/var/SymfonyRequirements.php
+containers/webapp/vendor/
+containers/webapp/web/bundles/
 
 # IDE settings
 .idea
 
 # DB data
-docker/db/data/*
+containers/database/data/*
+!containers/database/data/.gitkeep
 
-!.gitkeep
