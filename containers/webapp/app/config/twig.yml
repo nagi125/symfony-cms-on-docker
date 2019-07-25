@@ -1,0 +1,9 @@
+# Twig Configuration
+twig:
+  debug: '%kernel.debug%'
+  strict_variables: '%kernel.debug%'
+  form_themes:
+    - 'bootstrap_4_layout.html.twig'
+  globals:
+    base_url: '%base_url%'
+    static_base_url: '%static_base_url%'
